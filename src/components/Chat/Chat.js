@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import queryString from 'query-string';
+import {useSelector, useDispatch} from 'react-redux';
 import io from 'socket.io-client';
 
 import './Chat.css';
@@ -7,27 +7,30 @@ import './Chat.css';
 import InfoBar from '../InfoBar/InfoBar';
 import Input from '../Input/Input';
 import Messages from '../Messages/Messages';
-let socket;
+import {joinRoom} from '../../actions/personalAction'
 
-const Chat = ({location}) => {
-    const [name, setName] = useState('');
+
+let socket;
+const Chat = () => {
+    const socket = useSelector(state => state.personal.socket);
+    const name = useSelector(state => state.personal.name);
     const [room, setRoom] = useState('');
     const [message, setMessage] = useState('');
     const [messages, setMessages] = useState([]);
     const ENDPOINT = 'localhost:5000';
-
+    const dispatch = useDispatch();
     useEffect(() => {
-        const { name, room } = queryString.parse(location.search);
 
-        socket = io(ENDPOINT);
-        setName(name);
-        setRoom(room);
-
-        socket.emit('join', { name, room }, (error) => {
-            if(error) {
-                alert(error);
-            }
-        });
+        //socket =  personal.socket;
+        // // setRoom(room);
+        // socket = io(ENDPOINT)
+        dispatch(joinRoom(name[0]))
+        // //name = name.trim().toString()
+        // socket.emit('join', personal.name, (error) => {
+        //     if(error) {
+        //         alert(error);
+        //     }
+        // });
 
         return () => {
             socket.emit('disconnect');
@@ -35,15 +38,14 @@ const Chat = ({location}) => {
             socket.off();
         }
 
-    }, [ENDPOINT, location.search]);
+    }, []);
 
     useEffect(() => {
         socket.on('message', (message) => {
-            setMessages(messages => [...messages, message]);
-        })
+             setMessages(messages => [...messages, message]);
+         })
 
     }, []);
-
 
 
     // function for sending messages
@@ -59,12 +61,9 @@ const Chat = ({location}) => {
     return (
         <div className ="outerContainer">
             <div className = "chat">
-                <InfoBar room={room} />
-                <Messages messages={messages} name={name} />
+                <InfoBar />
+                <Messages messages={messages} name={socket.name} />
                 <Input message={message} setMessage={setMessage} sendMessage={sendMessage} />                    
-            </div>
-            <div className = "roomList">
-                {/* <ClientList /> */}
             </div>
         </div>
         

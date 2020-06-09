@@ -15,6 +15,16 @@
     height: 60%;
     width: 35%;
   }
+
+  .roomList {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: #FFFFFF;
+    border-radius: 5px;
+    height: 60%;
+    width: 20%;
+  }
   
   @media (min-width: 320px) and (max-width: 480px) {
     .outerContainer {
