@@ -15,10 +15,11 @@ const Join = ({location}) => {
     const dispatch = useDispatch();
     const ENDPOINT = 'localhost:5000';
 
+
      useEffect(() => {
          socket = io(ENDPOINT);
          dispatch(setSocket(socket));
-
+         
      }, [ENDPOINT, location.search]);
 
     return (

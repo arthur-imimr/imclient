@@ -42,8 +42,8 @@ const Chat = () => {
 
     useEffect(() => {
         socket.on('message', (message) => {
-             setMessages(messages => [...messages, message]);
-         })
+            setMessages(messages => [...messages, message]);
+        })
 
     }, []);
 
