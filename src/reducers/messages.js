@@ -1,13 +1,13 @@
 import {
     SET_MESSAGE,
     SEND_MESSAGE,
-    LOAD_MESSAGES
+    SET_MESSAGES
 } from '../actions/types';
 import { isSwitchStatement } from 'typescript';
 
 const initialState = {
     message: '',
-    messages : []
+    messages : [{user:'', content:''}]
 }
 
 export const messagesReducer = (state = initialState, action) => {
@@ -21,12 +21,13 @@ export const messagesReducer = (state = initialState, action) => {
 
     //message is sent
     case SEND_MESSAGE:
+        console.log(state);
         state.messages.push(state.message)
-        state.socket.emit('sendMessage', state.message,  ()=>state.message = '');
         return state
 
-    case LOAD_MESSAGES:
-        return action.payload
+    case SET_MESSAGES:
+        state.messages.push(action.payload)
+        return state
 
     default:
         return state

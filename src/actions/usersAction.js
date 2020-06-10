@@ -1,9 +1,8 @@
 import {
-
     ADD_USER,
     REMOVE_USER,
-    GET_BOT_USERS,
-    GET_AGENT_USERS
+    SET_BOT_USERS,
+    SET_AGENT_USERS
 } from './types';
 
 export const addUser = (id) => ({
@@ -16,13 +15,13 @@ export const removeUser = (id) => ({
     payload: id
 })
 
-export const getBotUsers = ([bot_users]) => ({
-    type: GET_BOT_USERS,
+export const setBotUsers = ([bot_users]) => ({
+    type: SET_BOT_USERS,
     payload: [bot_users]
 })
 
-export const getAgentUsers = ([agent_users]) => ({
-    type: GET_AGENT_USERS,
+export const setAgentUsers = ([agent_users]) => ({
+    type: SET_AGENT_USERS,
     payload: [agent_users]
 })
 

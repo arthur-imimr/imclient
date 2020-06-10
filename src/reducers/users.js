@@ -1,12 +1,18 @@
  import {
      ADD_USER,
      REMOVE_USER,
-     GET_AGENT_USERS,
-     GET_BOT_USERS
+     SET_BOT_USERS,
+     SET_AGENT_USERS
 
  } from '../actions/types';
 
-export const usersReducer = (state = {}, action ) => {
+const initialState = {
+    users: {},
+    bot_users : {},
+    agent_users : {}
+}
+
+export const usersReducer = (state = initialState, action ) => {
     switch (action.type) {
 
     case ADD_USER:
@@ -15,10 +21,10 @@ export const usersReducer = (state = {}, action ) => {
     case REMOVE_USER:
         return { ...state, ...action.payload }
 
-    case GET_AGENT_USERS:
-        return { ...state, ...action.payload }
+    case SET_BOT_USERS:
+        return { ...state, ...action.payload}
 
-    case GET_BOT_USERS:
+    case SET_AGENT_USERS:
         return { ...state, ...action.payload }
     
     default:

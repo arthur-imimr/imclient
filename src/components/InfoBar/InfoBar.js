@@ -4,12 +4,16 @@ import closeIcon from '../../icons/closeIcon.png';
 import onlineIcon from '../../icons/onlineIcon.png';
 
 import './InfoBar.css';
+import {useSelector} from 'react-redux';
 
-const InfoBar = () => (
+const InfoBar = () => {
+    const id = useSelector('');
+
+    return(
     <div className="infoBar">
         <div className="leftInnerContainer">
             <img className="onlineIcon" src={onlineIcon} alt="online icon"/>
-            {/* <h3>{room}</h3> */}
+             <h3>{id}</h3> 
         
         </div>
         <div className="rightInnerContainer">
@@ -18,6 +22,7 @@ const InfoBar = () => (
         
         </div>
     </div>
-)
+    )
+}
 
 export default InfoBar;

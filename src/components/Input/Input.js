@@ -3,7 +3,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import { setMessage, sendMessage } from '../../actions/messagesAction';
 import './Input.css';
 
-const Input = () => {
+const Input = ({sendMessage}) => {
     const message = useSelector(state=>state.messages.message)
 
     const dispatch = useDispatch()
@@ -15,9 +15,9 @@ const Input = () => {
             placeholder="Type a message..."
             value={message}
             onChange={(event)=>dispatch(setMessage(event.target.value))}
-            onKeyPress={event => event.key === 'Enter' ? dispatch(sendMessage(event)) : null}
+            onKeyPress={event => event.key === 'Enter' ? sendMessage(event) : null}
         />
-        <button className="sendButton" onClick={(event) => dispatch(sendMessage(event))}>Send </button>
+        <button className="sendButton" onClick={(event) => sendMessage(event)}>Send </button>
     </form>
     )
 

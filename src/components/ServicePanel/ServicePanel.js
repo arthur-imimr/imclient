@@ -1,56 +1,49 @@
-import React, { useState, useEffect } from 'react';
-import queryString from 'query-string';
-import io from 'socket.io-client';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 
 import './ServicePanel.css';
 
-import ServiceChat from '../ServiceChat/ServiceChat';
-import { addUser } from '../../actions/usersAction';
+import Chat from '../Chat/Chat';
 
-let socket;
 
 const ServicePanel = ({location}) => {
-    const [name, setName] = useState('');
-    // const [room, setRoom] = useState('');
-    const [message, setMessage] = useState('');
-    // const [messages, setMessages] = useState([]);
-    // const [users, setUsers] = useState([]);
-    const users = useSelector(state => state.users);
-    const ENDPOINT = 'localhost:5000';
-    const dispatch = useDispatch();
-    
+    const socket = useSelector(state => state.personal.socket);
+    const users = useSelector(state => state.users.users);
+    const bot_users = useSelector(state => state.users.bot_users);
+    const agent_users = useSelector(state => state.users.agent_users);
 
      useEffect(() => {
-        socket = io(ENDPOINT);
-        socket.emit('requestList', {} , (error) => {
+
+        socket.emit('getBotUsers', {} , (error) => {
              if(error) {
                  alert(error);
              }
         });
-    }, [ENDPOINT, location.search]);
-
-    useEffect(() => {
-        socket.on('usersList', ({users}) => {
-            dispatch(addUser(users));
-
-        })
-    }, []);
+         socket.emit('getAgentUsers', {}, (error) => {
+             if (error) {
+                 alert(error);
+             }
+         });
+    }, [location.search]);
 
     useEffect(() => {
         console.log(`use effect : ${users}`)
     }, [users])
 
-     const openChat = (event) => {
-         return "";
-     }
+
 
     return (
     
         <div>
             <div id = "chat">
+                <Chat />
+            </div>
+            <div id = "buttonContainer">
+                <button className="showBotUser"> </button>
+                <button className="showAgentUser"> </button>
             </div>
             <div className = "list">
+
     {/*users.map((user, i) => <button onClick={() => openChat(name === {user})}><div key={i}>{user}</div></button>)*/}
             users: {JSON.stringify(users)}
             </div>

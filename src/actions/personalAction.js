@@ -1,15 +1,12 @@
 import {
     SET_NAME,
     SET_SOCKET,
-    JOIN_ROOM
+    SET_ID
 } from './types';
-
-//import { emitAction } from '../app/websockets/client';
 
 export const setName = (letter) => {
     let name = [];
     name = [...name, letter]
-    // socket.emit('join', {name})
     return {
     type: SET_NAME,
     payload: name
@@ -25,13 +22,9 @@ export const setSocket = (_socket) => {
     }
 }
 
-export const joinRoom = (_roomId) => {
-
-
-    return{
-        type: JOIN_ROOM,
-        payload: _roomId
-    }
-}
+export const setId = (id) => ({
+    type:SET_ID,
+    payload:id
+})
 
 

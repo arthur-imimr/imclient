@@ -1,35 +1,32 @@
 import React, {useEffect} from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from "react-redux";
-import io from 'socket.io-client'
-import { setName, setSocket } from '../../actions/personalAction';
+//import io from 'socket.io-client'
+import { setName } from '../../actions/personalAction';
 
 import './Join.css';
 
-let socket;
+//let socket;
 
 const Join = ({location}) => {
     const name = useSelector(state => state.personal.name);
+    const socket = useSelector(state => state.personal.socket)
 
-    // const [room, setRoom] = useState('');
     const dispatch = useDispatch();
-    const ENDPOINT = 'localhost:5000';
 
 
      useEffect(() => {
-         socket = io(ENDPOINT);
-         dispatch(setSocket(socket));
-         
-     }, [ENDPOINT, location.search]);
 
+     }, []);
+
+     
     return (
         <div className="joinOuterContainer">
             <div className="joinInnerContainer">
                 <h1 className="heading">Join</h1>
-                <div><input placeholder="Name" className="joinInput" type="text" onChange={(event)=>dispatch(setName(event.target.value) )}/></div>
-                {/* <div><input placeholder="Room" className="joinInput mt-20" type="text" onChange={(event) => setRoom(event.target.value)} /></div> */}
-                {/* <Link onClick={event => (!name || !room) ? event.preventDefault() : null} to={`/chat?name=${name}&room=${room}`}> */}
-                <Link onClick={event => (!name) ? event.preventDefault() : null} to={`/chat`}>
+                <div><input placeholder="Name" className="joinInput" type="text" onChange={(event) => dispatch(setName(event.target.value))}/></div>
+
+                <Link onClick={event => (!name) ? event.preventDefault().then(socket.emit('addUser', {name})) : null} to={`/chat`}>
                     <button className="button mt-20" type="submit">Sign In</button>
                 </Link>
 
@@ -42,3 +39,4 @@ const Join = ({location}) => {
 }
 
 export default Join;
+
