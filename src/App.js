@@ -19,6 +19,7 @@ const App = () => {
     const messages =useSelector(state=> state.messages.messages);
     const dispatch = useDispatch();
     const setName = useSelector(state => state.personal.name);
+    const chatId = useSelector(state => state.personal.chatId);
 
     useEffect(() => {   
         const id = Cookies.get('client_id');
@@ -36,6 +37,7 @@ const App = () => {
     useEffect(() => {
         if (id) {
             const socket = io('http://localhost:5000');
+            let agentJoined = false;
 
             socket.on('connect', () => {
                 console.log("connected to the server");
@@ -62,32 +64,41 @@ const App = () => {
 
 
             //load old messages on room join
-            socket.on('joinResponse', (name, room) => {
-                if (setName === name) { 
-                    console.emit(`responding to join`)
-                    socket.emit('getMessagesByRoomId', { sessionId: id });
-                    dispatch(addMessage({ name, room }))
-                    console.log(messages)
-                }
+            socket.on('joinResponse', ({id, name}) => {
+                console.log(name);
+                //user detects service join
+                
+                if (name==true) { 
 
-                else {
+
                     console.log(`responding to self join`)
-                    dispatch(addMessage({ id, userId: `System Message`, roomId: id, content: ` ${name} has joined ${ room }`, createdAt: Date.now().toString()}))
-                    console.log(messages)
+                    dispatch(addMessage({ id, userId: `System Message`, roomId: id, content: ` Agent has joined ${id}`, createdAt: Date.now().toString() }))
+                    
+                }
+                //user first join
+                else {
+                    console.log(`responding to agent join`)
+                    
+                    if (!agentJoined) {
+                    dispatch(addMessage({ id, userId: `System Message`, roomId: id, content: ` An agent joined room ${id}`, createdAt: Date.now().toString() }))
+                    agentJoined = true;
+                    }
+
                 }
             })
 
-            socket.on('getMessagesByRoomId', (messages) => {
-                dispatch(setMessages( messages))
+            socket.on('getMessagesByRoomIdResponse', ({content}) => {
+                console.log(`proc message load`)
+                dispatch(setMessages(content))
             })
 
             //load user lists on service page load
-            socket.on('getAgentUsersResponse', ({ content }) => {
-                dispatch(setAgentUsers(content));
+            socket.on('getAgentUsersResponse', ({ users }) => {
+                dispatch(setAgentUsers(users));
             })
 
-            socket.on('getBotUsersResponse', ({ content }) => {
-                dispatch(setBotUsers(content));
+            socket.on('getBotUsersResponse', ({ users }) => {
+                dispatch(setBotUsers(users));
             })
 
 

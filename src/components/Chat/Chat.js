@@ -7,6 +7,7 @@ import './Chat.css';
 import InfoBar from '../InfoBar/InfoBar';
 import Input from '../Input/Input';
 import Messages from '../Messages/Messages';
+import {setChatId} from '../../actions/personalAction';
 
 
 const Chat = () => {
@@ -21,11 +22,13 @@ const Chat = () => {
     const dispatch = useDispatch();
 
     chatId = chatId || id;
+
     useEffect(() => {
+        dispatch(setChatId(chatId));
         console.log(`ownid:${id} chatid:${chatId}`);
         socket.emit('join', {roomId:chatId})
-
-    }, [id]);
+        socket.emit('getMessagesByRoomId', { roomId: chatId });
+    }, [chatId]);
 
 
     // function for sending messages
