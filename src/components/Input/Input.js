@@ -24,7 +24,7 @@ const Input = (props) => {
 
     }
     return (
-    <form className="form">
+    <form className="form" onSubmit={e => e.preventDefault()}>
         <input 
             className="input"
             type="text"
