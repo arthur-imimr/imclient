@@ -101,6 +101,24 @@ const App = () => {
                 dispatch(setBotUsers(users));
             })
 
+            socket.on('addAudioResponse', ({payload}) => {
+                
+                socket.emit('getAudio', {dataId: payload.dataId});
+
+                socket.on('getAudioResponse', ({data}) => {
+                    dispatch(addMessage({
+                        id: payload.id,
+                        userId: payload.userId,
+                        roomId: payload.roomId,
+                        content: data,
+                        createdAt: payload.createdAt
+                    }));
+
+                })
+            })
+
+            
+
 
             dispatch(setSocket(socket));
 

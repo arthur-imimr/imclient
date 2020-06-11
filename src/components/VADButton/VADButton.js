@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import vad from 'voice-activity-detection';
 import { ReactMic } from 'react-mic';
+import { useSelector} from 'react-redux';
 
 export const VADButton = () => {
 
     let audioContext;
-
+    const socket = useSelector(state => state.personal.socket);
     const [isRecording, setRecording] = useState(false);
 
     const [isVAD, setVAD] = useState(false);
@@ -62,6 +63,9 @@ export const VADButton = () => {
 
     // on recorded
     const handleMicStop = async (blob) => {
+
+        const data = await toBase64(blob.blob);
+        socket.emit('addAudio', { data });
         console.log(await toBase64(blob.blob));
     }
 

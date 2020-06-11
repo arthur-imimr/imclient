@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { ReactMic } from 'react-mic';
+import {useSelector} from 'react-redux';
+
 
 export const PressToTalkButton = () => {
+    const socket = useSelector(state => state.personal.socket);
 
     const [isRecording, setRecording] = useState({
         mic: false,
@@ -61,6 +64,8 @@ export const PressToTalkButton = () => {
     });
     
     const onStop = async (blob) => {
+        const data = await toBase64(blob.blob);
+        socket.emit('addAudio', {data});
         console.log(await toBase64(blob.blob));
     }
 

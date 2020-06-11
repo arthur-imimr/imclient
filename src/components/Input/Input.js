@@ -2,6 +2,9 @@ import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import { setMessage, addMessage } from '../../actions/messagesAction';
 import './Input.css';
+import {VADButton} from '../VADButton/VADButton';
+import {PressToTalkButton} from '../PressToTalkButton/PressToTalkButton';
+
 
 const Input = (props) => {
     const message = useSelector(state=>state.messages.message)
@@ -30,6 +33,9 @@ const Input = (props) => {
             onChange={(event)=>dispatch(setMessage(event.target.value))}
             onKeyPress={event => event.key === 'Enter' ? sendMessage(event) : null}
         />
+        <PressToTalkButton />
+        <VADButton />
+
         <button className="sendButton" onClick={(event) => sendMessage(event)}>Send </button>
     </form>
     )
