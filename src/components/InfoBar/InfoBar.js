@@ -6,14 +6,14 @@ import onlineIcon from '../../icons/onlineIcon.png';
 import './InfoBar.css';
 import {useSelector} from 'react-redux';
 
-const InfoBar = () => {
-    const id = useSelector('');
+const InfoBar = (props) => {
+    const id = useSelector(state => state.personal.id);
 
     return(
     <div className="infoBar">
         <div className="leftInnerContainer">
             <img className="onlineIcon" src={onlineIcon} alt="online icon"/>
-             <h3>{id}</h3> 
+             <h3>{props.chatId}</h3> 
         
         </div>
         <div className="rightInnerContainer">

@@ -5,7 +5,7 @@ import Cookies from 'js-cookie';
 import {v4 as uuid} from 'uuid';
 import {setId, setSocket} from './actions/personalAction'
 import io from 'socket.io-client'
-import {setMessages} from './actions/messagesAction'
+import {addMessage, setMessages} from './actions/messagesAction'
 import {setAgentUsers, setBotUsers} from './actions/usersAction'
 
 import {useSelector, useDispatch} from 'react-redux';
@@ -16,8 +16,9 @@ import ServicePanel from './components/ServicePanel/ServicePanel';
 
 const App = () => {
     const id = useSelector(state => state.personal.id);
+    const messages =useSelector(state=> state.messages.messages);
     const dispatch = useDispatch();
-    //const id = useSelector(state => state.personal.id);
+    const setName = useSelector(state => state.personal.name);
 
     useEffect(() => {   
         const id = Cookies.get('client_id');
@@ -44,9 +45,15 @@ const App = () => {
                 console.log("disconnected from the server");
             });
 
-            //on adding message
-            socket.on('addMessageResponse', (message) => {
-                dispatch(setMessages({user:message.user, content:message.content}));
+
+            socket.on('addMessageResponse', (content) => {
+                dispatch(addMessage({
+                    id: content.id,
+                    userId: content.userId,
+                    roomId: content.roomId,
+                    content: content.content,
+                    createdAt: content.createdAt}));
+                
             })
 
 
@@ -56,34 +63,42 @@ const App = () => {
 
             //load old messages on room join
             socket.on('joinResponse', (name, room) => {
-                socket.emit('getMessagesByRoomId', {sessionId:id});
-                dispatch(setMessages({user:`System`, content:`${name} has joined Room ${room}`}))
+                if (setName === name) { 
+                    console.emit(`responding to join`)
+                    socket.emit('getMessagesByRoomId', { sessionId: id });
+                    dispatch(addMessage({ name, room }))
+                    console.log(messages)
+                }
+
+                else {
+                    console.log(`responding to self join`)
+                    dispatch(addMessage({ id, userId: `System Message`, roomId: id, content: ` ${name} has joined ${ room }`, createdAt: Date.now().toString()}))
+                    console.log(messages)
+                }
             })
-            
+
             socket.on('getMessagesByRoomId', (messages) => {
-                dispatch(setMessages({user:messages[1], content:messages[3]}))
+                dispatch(setMessages( messages))
             })
 
             //load user lists on service page load
-            socket.on('getAgentUsersResponse', ({users}) => {
-                dispatch(setAgentUsers(users));
-            })
-                        
-            socket.on('getBotUsersResponse', ({ users }) => {
-                dispatch(setBotUsers(users));
+            socket.on('getAgentUsersResponse', ({ content }) => {
+                dispatch(setAgentUsers(content));
             })
 
-        
+            socket.on('getBotUsersResponse', ({ content }) => {
+                dispatch(setBotUsers(content));
+            })
+
 
             dispatch(setSocket(socket));
 
             return () => {
                 socket.disconnect();
-
-                socket.off()
             }
         }
     }, [id]);
+
 
     return (
     <Router>

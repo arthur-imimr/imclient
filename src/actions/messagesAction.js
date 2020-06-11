@@ -1,15 +1,14 @@
 import {
     SET_MESSAGE,
-    SEND_MESSAGE,
+    ADD_MESSAGE,
     SET_MESSAGES
 } from './types';
 
-export const sendMessage = (event, user, content) => {
-    event.preventDefault()
+export const addMessage = (content) => {
     
     return {
-    type: SEND_MESSAGE,
-    payload: {user, content}
+    type: ADD_MESSAGE,
+    payload: content
     }
 }
 

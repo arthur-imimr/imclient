@@ -8,24 +8,25 @@
 
 const initialState = {
     users: {},
-    bot_users : {},
-    agent_users : {}
+    bot_users : [],
+    agent_users : []
 }
 
 export const usersReducer = (state = initialState, action ) => {
     switch (action.type) {
 
     case ADD_USER:
-        return { ...state, ...action.payload }
+        return { ...state, users: action.payload }
 
     case REMOVE_USER:
-        return { ...state, ...action.payload }
+        const newUsersState = state.users.filter(action.payload)
+        return { ...state, users: newUsersState}
 
     case SET_BOT_USERS:
-        return { ...state, ...action.payload}
+        return { ...state, bot_users: action.payload}
 
     case SET_AGENT_USERS:
-        return { ...state, ...action.payload }
+        return { ...state, agent_users: action.payload }
     
     default:
         return state

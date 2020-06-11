@@ -1,12 +1,11 @@
 import {
     SET_NAME,
     SET_SOCKET,
-    SET_ID
+    SET_ID,
+    SET_CHAT_ID
 } from './types';
 
-export const setName = (letter) => {
-    let name = [];
-    name = [...name, letter]
+export const setName = (name) => {
     return {
     type: SET_NAME,
     payload: name
@@ -26,5 +25,11 @@ export const setId = (id) => ({
     type:SET_ID,
     payload:id
 })
+
+export const setChatId = (id) => ({
+    type: SET_CHAT_ID,
+    payload: id
+})
+
 
 

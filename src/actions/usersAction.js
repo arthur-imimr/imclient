@@ -15,13 +15,13 @@ export const removeUser = (id) => ({
     payload: id
 })
 
-export const setBotUsers = ([bot_users]) => ({
+export const setBotUsers = (bot_users) => ({
     type: SET_BOT_USERS,
-    payload: [bot_users]
+    payload: bot_users
 })
 
-export const setAgentUsers = ([agent_users]) => ({
+export const setAgentUsers = (agent_users) => ({
     type: SET_AGENT_USERS,
-    payload: [agent_users]
+    payload: agent_users
 })
 

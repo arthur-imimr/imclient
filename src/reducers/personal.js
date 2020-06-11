@@ -2,28 +2,31 @@
 import {
     SET_NAME,
     SET_SOCKET,
-    SET_ID
+    SET_ID,
+    SET_CHAT_ID
 } from '../actions/types';
 
 const initialState = {
     name : {},
     socket : {},
-    id: {}
+    id: '',
+    chatId: ''
 }
 
 export const personalReducer = (state = initialState, action ) => {
    switch (action.type) {
    case SET_ID:
-       state.id = action.payload
-       return state
+       
+       return {...state, id: action.payload}
 
    case SET_NAME:
-       state.name = action.payload
-       return state
+       return {...state, name: action.payload}
 
    case SET_SOCKET:
-        state.socket = action.payload
-        return state 
+        return {...state, socket: action.payload}; 
+
+   case SET_CHAT_ID:
+       return {...state, chatId: action.payload};
 
    default:
        return state

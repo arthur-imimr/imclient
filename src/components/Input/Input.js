@@ -1,12 +1,25 @@
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import { setMessage, sendMessage } from '../../actions/messagesAction';
+import { setMessage, addMessage } from '../../actions/messagesAction';
 import './Input.css';
 
-const Input = ({sendMessage}) => {
+const Input = (props) => {
     const message = useSelector(state=>state.messages.message)
-
+    const socket = useSelector(state=>state.personal.socket)
+    const id = useSelector(state=>state.personal.id)
     const dispatch = useDispatch()
+
+
+    const sendMessage = (event) => {
+        event.preventDefault();
+
+        if (message) {
+            dispatch(addMessage({ id, userId: id, roomId: props.chatId, content: message, createdAt: Date.now().toString()}))
+            socket.emit('addMessage', { roomId: props.chatId, content: message}, () => dispatch(setMessage('')));
+            dispatch(setMessage(''));
+        }
+
+    }
     return (
     <form className="form">
         <input 

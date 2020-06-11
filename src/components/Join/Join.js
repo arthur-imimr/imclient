@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useCallback} from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from "react-redux";
 //import io from 'socket.io-client'
@@ -13,12 +13,19 @@ const Join = ({location}) => {
     const socket = useSelector(state => state.personal.socket)
 
     const dispatch = useDispatch();
-
+    //const name = 'peter';
 
      useEffect(() => {
 
-     }, []);
+    
 
+
+     });
+
+
+    const handleClick = (e) => {
+        socket.emit('addUser', {name})
+    }
      
     return (
         <div className="joinOuterContainer">
@@ -26,7 +33,7 @@ const Join = ({location}) => {
                 <h1 className="heading">Join</h1>
                 <div><input placeholder="Name" className="joinInput" type="text" onChange={(event) => dispatch(setName(event.target.value))}/></div>
 
-                <Link onClick={event => (!name) ? event.preventDefault().then(socket.emit('addUser', {name})) : null} to={`/chat`}>
+                <Link onClick={event => (!name) ? event.preventDefault() : handleClick(event)} to={`/chat`}>
                     <button className="button mt-20" type="submit">Sign In</button>
                 </Link>
 
