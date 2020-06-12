@@ -12,9 +12,10 @@ import {
 import './ServicePanel.css';
 import {setName} from '../../actions/personalAction';
 import Chat from '../Chat/Chat';
+import UserList from '../UserList/UserList';
 
 
-const ServicePanel = ({location}) => {
+const ServicePanel = () => {
     const socket = useSelector(state => state.personal.socket);
     //const users = useSelector(state => state.users.users);
     const bot_users = useSelector(state => state.users.bot_users);
@@ -35,7 +36,7 @@ const ServicePanel = ({location}) => {
                  alert(error);
              }
          });
-    }, [location.search, users]);
+    }, [users]);
 
     // useEffect(() => {
     //     console.log(`use effect : ${users}`)
@@ -58,9 +59,11 @@ const ServicePanel = ({location}) => {
             </div>
             <div id = "buttonContainer">
                 <button className="showBotUser">Bot</button>
-                <button className="showAgentUser">Agent</button>
+                <button className="showAgentUser">Agents</button>
             </div>
-            <div className = "list"><li>
+            <div className = "list">
+                <UserList bot_users={bot_users} match={match}/>
+                <li>
             {bot_users.map((bot_user, i) => <ul><Link to={`${match.url}/${bot_user}`}>{bot_user}</Link></ul>)}
     {/*users.map((user, i) => <button onClick={() => openChat(name === {user})}><div key={i}>{user}</div></button>)*/}
             <ul><Link to={`${match.url}/bob`}>Bob</Link></ul>

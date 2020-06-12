@@ -50,7 +50,7 @@ const App = () => {
                 console.log("disconnected from the server");
             });
 
-
+            //DISPLAY MESSAGE FROM OTHER USER
             socket.on('addMessageResponse', (content) => {
                 dispatch(addMessage({
                     id: content.id,
@@ -62,11 +62,9 @@ const App = () => {
             })
 
 
-            //LISTENER adduserresponse
-            //on adduser, dispatch getagent and getbot users
-
+            //UPDATE USER LIST FOR AGENT
             socket.on('addUserResponse', ({user, name}) => {
-                dispatch(addUser(name, user))
+                dispatch(addUser({name:name, user:user}))
             })
 
             //load old messages on room join
