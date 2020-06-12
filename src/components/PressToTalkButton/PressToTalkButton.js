@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { ReactMic } from 'react-mic';
-import {useSelector} from 'react-redux';
+import {useSelector,useDispatch} from 'react-redux';
+import {addMessage} from '../../actions/messagesAction';
 
 
 export const PressToTalkButton = () => {
     const socket = useSelector(state => state.personal.socket);
+    const chatId = useSelector(state => state.personal.chatId);
+    const id = useSelector(state => state.personal.id);
+    const dispatch = useDispatch();
 
     const [isRecording, setRecording] = useState({
         mic: false,
@@ -64,9 +68,18 @@ export const PressToTalkButton = () => {
     });
     
     const onStop = async (blob) => {
+        console.log('proccing emit');
         const data = await toBase64(blob.blob);
-        socket.emit('addAudio', {data});
-        console.log(await toBase64(blob.blob));
+        console.log(chatId);
+        socket.emit('addAudio', {roomId: chatId, data});
+        dispatch(addMessage({
+            id: id,
+            userId: id,
+            roomId: chatId,
+            content: data,
+            createdAt: Date.now().toString()
+        }));
+        console.log(data);
     }
 
     return (

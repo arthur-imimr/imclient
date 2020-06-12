@@ -5,9 +5,9 @@ import {
     SET_AGENT_USERS
 } from './types';
 
-export const addUser = (id) => ({
+export const addUser = (user) => ({
     type: ADD_USER,
-    payload: id
+    payload: user
 })
 
 export const removeUser = (id) => ({

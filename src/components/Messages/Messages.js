@@ -14,8 +14,6 @@ const Messages = () => {
 /* </ ScrollToBottom> */
  //(messages).map() = (message, i) => <div key={i}><p>{name}: {message}</p></div>
 
-
-
  
 return (
  <ScrollToBottom className="messages">

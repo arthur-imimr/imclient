@@ -20,6 +20,7 @@ const ServicePanel = ({location}) => {
     const bot_users = useSelector(state => state.users.bot_users);
     //const agent_users = useSelector(state => state.users.agent_users);
     const dispatch = useDispatch();
+    const users = useSelector(state =>state.users.users);
 
      useEffect(() => {
 
@@ -34,7 +35,7 @@ const ServicePanel = ({location}) => {
                  alert(error);
              }
          });
-    }, [location.search]);
+    }, [location.search, users]);
 
     // useEffect(() => {
     //     console.log(`use effect : ${users}`)

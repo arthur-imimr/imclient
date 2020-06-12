@@ -6,13 +6,14 @@ import {v4 as uuid} from 'uuid';
 import {setId, setSocket} from './actions/personalAction'
 import io from 'socket.io-client'
 import {addMessage, setMessages} from './actions/messagesAction'
-import {setAgentUsers, setBotUsers} from './actions/usersAction'
+import {setAgentUsers, setBotUsers,addUser} from './actions/usersAction'
 
 import {useSelector, useDispatch} from 'react-redux';
 
 import Join from './components/Join/Join';
 import Chat from './components/Chat/Chat';
 import ServicePanel from './components/ServicePanel/ServicePanel';
+import { ifStatement } from '@babel/types';
 
 const App = () => {
     const id = useSelector(state => state.personal.id);
@@ -39,6 +40,8 @@ const App = () => {
             const socket = io('http://localhost:5000');
             let agentJoined = false;
 
+            let payload;
+
             socket.on('connect', () => {
                 console.log("connected to the server");
             });
@@ -62,6 +65,9 @@ const App = () => {
             //LISTENER adduserresponse
             //on adduser, dispatch getagent and getbot users
 
+            socket.on('addUserResponse', ({user, name}) => {
+                dispatch(addUser(name, user))
+            })
 
             //load old messages on room join
             socket.on('joinResponse', ({id, name}) => {
@@ -89,7 +95,14 @@ const App = () => {
 
             socket.on('getMessagesByRoomIdResponse', ({content}) => {
                 console.log(`proc message load`)
-                dispatch(setMessages(content))
+                
+                content.filter(x => x.isImage != undefined).forEach((message) => {
+                        socket.emit('getAudio', { id: message.dataId });
+                        payload = message;
+                });
+
+                console.log(content);
+                dispatch(setMessages(content.filter(x => x.isImage == undefined)))
             })
 
             //load user lists on service page load
@@ -101,20 +114,27 @@ const App = () => {
                 dispatch(setBotUsers(users));
             })
 
-            socket.on('addAudioResponse', ({payload}) => {
-                
-                socket.emit('getAudio', {dataId: payload.dataId});
 
-                socket.on('getAudioResponse', ({data}) => {
-                    dispatch(addMessage({
-                        id: payload.id,
-                        userId: payload.userId,
-                        roomId: payload.roomId,
-                        content: data,
-                        createdAt: payload.createdAt
-                    }));
+            socket.on('addAudioResponse', (audioPayload) => {
+                console.log(`audio response`);
+                console.log(audioPayload.id);                
+                payload = audioPayload;
+                socket.emit('getAudio', {id: payload.dataId});
 
-                })
+
+            })
+
+            socket.on('getAudioResponse', ({ data }) => {
+                console.log(`audio data get`);
+                console.log(data);
+                dispatch(addMessage({
+                    id: payload.id,
+                    userId: payload.userId,
+                    roomId: payload.roomId,
+                    content: data,
+                    createdAt: payload.createdAt
+                }));
+
             })
 
             
