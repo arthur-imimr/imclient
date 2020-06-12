@@ -73,12 +73,12 @@
 <details>
 <summary>PERSONAL</summary>
 
-{
-	name : '', 
-	socket : {},
-	id : '', 
-	chatId : '' //agent use mostly
-}
+			{
+				name : '', 
+				socket : {},
+				id : '', 
+				chatId : '' //agent use mostly
+			}
 
 </details>
 
@@ -86,20 +86,20 @@
 <details>
 <summary>USERS</summary>
 
-{
-	users: [] // array of objects containing user details
-	bot_users : [],  // id only
-	agent_users : [],  // id only
-}
+			{
+				users: [] // array of objects containing user details
+				bot_users : [],  // id only
+				agent_users : [],  // id only
+			}
 
 </details>
 
 <details>
 <summary>MESSAGES</summary>
-{
-	message: '' //for on key sending
-	messages: [] array of message objects
-}
+			{
+				message: '' //for on key sending
+				messages: [] array of message objects
+			}
 </details>
 
 # ACTIONS
@@ -126,9 +126,11 @@
 
 <details>
 <summary> MESSAGES</summary>
+
 			-set message
 			-add message
 			-load messages
+			
 </details>
 
 # LISTENERS
