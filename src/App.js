@@ -67,7 +67,7 @@ const App = () => {
                 dispatch(addUser({name:name, user:user}))
             })
 
-            //load old messages on room join
+            //JOIN ROOM NOTIFICATION
             socket.on('joinResponse', ({id, name}) => {
                 console.log(name);
                 //user detects service join
@@ -90,10 +90,10 @@ const App = () => {
 
                 }
             })
-
+            //LOAD OLD MESSAGES
             socket.on('getMessagesByRoomIdResponse', ({content}) => {
                 console.log(`proc message load`)
-                
+                //FILTER MESSAGES BY TYPE
                 content.filter(x => x.isImage != undefined).forEach((message) => {
                         socket.emit('getAudio', { id: message.dataId });
                         payload = message;
@@ -112,7 +112,7 @@ const App = () => {
                 dispatch(setBotUsers(users));
             })
 
-
+            //GET AUDIO DATA FROM ID
             socket.on('addAudioResponse', (audioPayload) => {
                 console.log(`audio response`);
                 console.log(audioPayload.id);                
@@ -122,6 +122,7 @@ const App = () => {
 
             })
 
+            //PUT AUDIO DATA INTO MESSAGE DISPLAY
             socket.on('getAudioResponse', ({ data }) => {
                 console.log(`audio data get`);
                 console.log(data);

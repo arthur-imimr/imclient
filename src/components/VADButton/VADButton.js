@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import vad from 'voice-activity-detection';
 import { ReactMic } from 'react-mic';
 import { useSelector, useDispatch} from 'react-redux';
+import {addMessage} from '../../actions/messagesAction';
 
 export const VADButton = () => {
 
     let audioContext;
     const socket = useSelector(state => state.personal.socket);
     const chatId = useSelector(state => state.personal.chatId);
+    const id = useSelector(state=>state.personal.id);
     const [isRecording, setRecording] = useState(false);
     const dispatch = useDispatch();
 
@@ -68,7 +70,15 @@ export const VADButton = () => {
 
         const data = await toBase64(blob.blob);
         socket.emit('addAudio', { roomId: chatId, data });
+        dispatch(addMessage({
+            id: id,
+            userId: id,
+            roomId: chatId,
+            content: data,
+            createdAt: Date.now().toString()
+        }));
         console.log(await toBase64(blob.blob));
+
     }
 
     // on start button pressed

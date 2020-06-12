@@ -1,68 +1,167 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# COMPONENTS
+<details>
+<summary>Agents</summary>
+____________________
+Service Panel:{
+	Chat: { InfoBar,
+			Messages: {
+				Message
+				},
+			Input:{
+				SuggestionPopUp,s
+				Voice: {
+					Record,
+					VAD
+				},
+				Video: {
+					Record,
+					VAD
+				},
+				Image: {
+					Camera,
+					OtherInput
+				},
+				CallAgent: {
+					Voice,
+					Video
+				}
+			}
+		}
+	ButtonPanel: {
+		Agent/BotButton
+	}
+	UserList: {
+		NameDisplay,
+		Channel Icon (Social Media),
+		CallWaiting/AwaitingAgentReply/AwaitingCustomerReply/Finished Icon
+		}
+}
+</details>
 
-## Available Scripts
+<details>
+<summary>Customers</summary>
+____________________
+Chat: { InfoBar,
+		Messages: {
+			Message
+			},
+		Input:{
+			SuggestionPopUp,
+			Voice: {
+				Record,
+				VAD
+			},
+			Video: {
+				Record,
+				VAD
+			},
+			Image: {
+				Camera,
+				OtherInput
+			},
+			CallAgent: {
+				Voice,
+				Video
+			}
+		}
+	}
 
-In the project directory, you can run:
+</details>
 
-### `npm start`
+# STATES
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+<details>
+<summary>PERSONAL</summary>
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+{
+	name : '', 
+	socket : {},
+	id : '', 
+	chatId : '' //agent use mostly
+}
 
-### `npm test`
+</details>
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `npm run build`
+<details>
+<summary>USERS</summary>
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+{
+	users: [] // array of objects containing user details
+	bot_users : [],  // id only
+	agent_users : [],  // id only
+}
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+</details>
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+<details>
+<summary>MESSAGES</summary>
+{
+	message: '' //for on key sending
+	messages: [] array of message objects
+}
+</details>
 
-### `npm run eject`
+# ACTIONS
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+<details>
+<summary> PERSONAL</summary>
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+-set name
+-set socket
+-set id
+-set chatid
+</details>
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+<details>
+<summary> USERS</summary>
+-set bot users
+-set agent users
+-add user
+-remove user
+</details>
 
-## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+<details>
+<summary> MESSAGES</summary>
+-set message
+-add message
+-load messages
+</details>
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+# LISTENERS
+<details>
 
-### Code Splitting
+<summary>Click to expand </summary>
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+            //DISPLAY NEW MESSAGE FROM OTHER USER
+            socket.on('addMessageResponse', (content) => {
 
-### Analyzing the Bundle Size
+            //UPDATE USER LIST FOR AGENT
+            socket.on('addUserResponse', ({user, name}) => {
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+            //JOIN ROOM NOTIFICATION
+            socket.on('joinResponse', ({id, name}) => {
 
-### Making a Progressive Web App
+            //LOAD OLD MESSAGES ON ROOM JOIN
+            socket.on('getMessagesByRoomIdResponse', ({content}) => {
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+                //FILTER MESSAGES BY TYPE
+                content.filter(x => x.isImage != undefined).forEach((message) => {
 
-### Advanced Configuration
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+            //LOAD USER LISTS ON SERVICE PANEL LOAD
+            socket.on('getAgentUsersResponse', ({ users }) => {
 
-### Deployment
+            socket.on('getBotUsersResponse', ({ users }) => {
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
 
-### `npm run build` fails to minify
+            //GET AUDIO DATA FROM ID
+            socket.on('addAudioResponse', (audioPayload) => {
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+
+            //PUT AUDIO DATA INTO MESSAGE DISPLAY
+            socket.on('getAudioResponse', ({ data }) => {
+
+</details>
